@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+<center>
+	
+	<title>Quick Start - Leaflet</title>
+<script type="text/javascript" src="washgeo.js"></script>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="shortcut icon" type="image/x-icon" href="file:///C|/Users/hgreen/Desktop/docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+
+
+</head>
+<body>
+	<img src="4C.png" width="300" height="64" alt=""/>
+<div class="jumbotron text-center">
+  <h1 style="color: #003366">Washington Stormwater Overview</h1>
+	<p style="color: #003366">Flowpaths and Depressional Areas</p>
+	</div>
+	<div class="container">
+	  <div class="row">
+	    <div class="col-sm-4">
+			<h3><p style="color: #ff6633">Flowpaths</p></h3>
+	      <p><p style="color: #003366"><b>This network of dark blue lines displays the path water would take based on terrain.
+				Lines begin when 10 acres or more contribute to a point and then continue
+			and branch with other lines to form the network of drainage paths.</p>
+	    </div>
+	    <div class="col-sm-4">
+			<h3><p style="color: #ff6633">Depressional Areas</h3>
+	      <p><p style="color: #003366">Low lying areas, essentials bowls, that occur in the terrain are highlighted as dark
+				blue areas. The combination of these areas and major flowpath lines typically indicates
+			an area that has flooding issues.</p>
+
+	    </div>
+	    <div class="col-sm-4">
+			<h3><p style="color: #ff6633">References</p></h3>
+	      <p><p style="color: #003366">Flowpaths developed using CloudCompare, QGIS, and SAGA GIS based on 2012 Tazewall County Lidar data.</p>
+	    </div>
+	  </div>
+	</div>
+
+<div id="mapid" style="width: 1200px; height: 800px;"></div>
+<script src="file:///C|/Users/hgreen/Desktop/washgeo.js" type="text/javascript"></script>
+
+<script>
+
+	var mymap = L.map('mapid').setView([40.702199304734954, -89.42110472858815], 14);
+
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11',
+		tileSize: 512,
+		zoomOffset: -1
+	}).addTo(mymap);
+
+	function onEachFeature(feature, layer) {
+		var popupContent = "<p>I started out as a GeoJSON " +
+				feature.geometry.type + ", but now I'm a Leaflet vector!</p>";
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	var myStyle = {
+	    "color": "#191970",
+	    "weight": 2,
+	    "opacity": 0.65,
+			"fillOpacity": 0.9
+		};
+
+	L.geoJSON( washlow, {
+
+		style: myStyle
+	}).addTo(mymap);
+
+	var boundStyle = {
+	    "color": "#000000",
+	    "weight": 5,
+	    "opacity": 1,
+			"fillOpacity": 0
+		};
+
+	L.geoJSON( washboundary, {
+
+		style: boundStyle
+	}).addTo(mymap);
+
+	var flowStyle = {
+			"color": "#191970",
+			"weight": 2,
+			"opacity": 0.3
+		};
+
+	L.geoJSON( washflowpath, {
+
+		style: flowStyle
+	}).addTo(mymap);
+
+</script>
+
+
+
+</body>
+</html>
